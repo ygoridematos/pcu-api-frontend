@@ -61,6 +61,10 @@ app.delete("/usuarios/:id", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
+app.get("/", (req, res) => {
+  res.send("API PCU rodando 🚀");
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
