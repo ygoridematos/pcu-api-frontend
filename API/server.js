@@ -21,19 +21,15 @@ app.post("/usuarios", async (req, res) => {
 });
 
 app.get("/usuarios", async (req, res) => {
-  let users = [];
+  const { name, email, age } = req.query;
 
-  if (req.query) {
-    users = await prisma.user.findMany({
-      where: {
-        name: req.query.name,
-        email: req.query.email,
-        age: req.query.age,
-      },
-    });
-  } else {
-    users = await prisma.user.findMany();
-  }
+  const users = await prisma.user.findMany({
+    where: {
+      ...(name && { name }),
+      ...(email && { email }),
+      ...(age && { age: Number(age) }),
+    },
+  });
 
   res.status(200).json(users);
 });
@@ -63,4 +59,8 @@ app.delete("/usuarios/:id", async (req, res) => {
   res.status(200).json({ message: "Usuário deletado com sucesso!" });
 });
 
-app.listen(3000);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
