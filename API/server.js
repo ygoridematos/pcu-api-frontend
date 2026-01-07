@@ -3,10 +3,21 @@ import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-
 const app = express();
+
+// 🔥 CORS configurado corretamente
+app.use(
+  cors({
+    origin: "*", // depois pode restringir para o domínio do Vercel
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// 🔥 garante resposta ao OPTIONS
+app.options("*", cors());
+
 app.use(express.json());
-app.use(cors());
 
 app.post("/usuarios", async (req, res) => {
   await prisma.user.create({
