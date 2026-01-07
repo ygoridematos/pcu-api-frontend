@@ -27,7 +27,7 @@ app.get("/usuarios", async (req, res) => {
     where: {
       ...(name && { name }),
       ...(email && { email }),
-      ...(age && { age: Number(age) }),
+      ...(age && { age }),
     },
   });
 
