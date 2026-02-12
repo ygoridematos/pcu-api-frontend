@@ -5,75 +5,113 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const app = express();
 
-// 🔥 CORS configurado corretamente
+// --- Configurações Iniciais ---
+
+// Configuração do CORS para permitir que o Frontend acesse esta API
 app.use(
   cors({
-    origin: "*", // depois pode restringir para o domínio do Vercel
+    origin: "*", // Em produção, substitua "*" pelo domínio do seu site (ex: vercel.app)
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
-// 🔥 garante resposta ao OPTIONS
-app.options("*", cors());
-
+// Habilita o Express para ler JSON no corpo das requisições
 app.use(express.json());
 
+// --- Rotas da API (CRUD) ---
+
+/**
+ * Rota POST: Cria um novo usuário
+ * Endpoint: /usuarios
+ */
 app.post("/usuarios", async (req, res) => {
-  await prisma.user.create({
-    data: {
-      email: req.body.email,
-      name: req.body.name,
-      age: req.body.age,
-    },
-  });
-
-  res.status(201).json(req.body);
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email: req.body.email,
+        name: req.body.name,
+        age: req.body.age,
+      },
+    });
+    // Retorna o usuário criado (incluindo o ID gerado pelo banco)
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao criar usuário" });
+  }
 });
 
+/**
+ * Rota GET: Lista os usuários
+ * Endpoint: /usuarios
+ * Suporta filtros via Query Params (?name=...&email=...)
+ */
 app.get("/usuarios", async (req, res) => {
-  const { name, email, age } = req.query;
+  try {
+    const { name, email, age } = req.query;
 
-  const users = await prisma.user.findMany({
-    where: {
-      ...(name && { name }),
-      ...(email && { email }),
-      ...(age && { age }),
-    },
-  });
+    const users = await prisma.user.findMany({
+      where: {
+        // Sintaxe curta para adicionar filtros apenas se existirem
+        ...(name && { name }),
+        ...(email && { email }),
+        ...(age && { age }),
+      },
+    });
 
-  res.status(200).json(users);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao buscar usuários" });
+  }
 });
 
+/**
+ * Rota PUT: Atualiza um usuário existente
+ * Endpoint: /usuarios/:id
+ */
 app.put("/usuarios/:id", async (req, res) => {
-  await prisma.user.update({
-    where: {
-      id: req.params.id,
-    },
-    data: {
-      email: req.body.email,
-      name: req.body.name,
-      age: req.body.age,
-    },
-  });
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: req.params.id, // Certifique-se que o tipo do ID (String/Int) bate com o schema do Prisma
+      },
+      data: {
+        email: req.body.email,
+        name: req.body.name,
+        age: req.body.age,
+      },
+    });
 
-  res.status(201).json(req.body);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao atualizar usuário" });
+  }
 });
 
+/**
+ * Rota DELETE: Remove um usuário
+ * Endpoint: /usuarios/:id
+ */
 app.delete("/usuarios/:id", async (req, res) => {
-  await prisma.user.delete({
-    where: {
-      id: req.params.id,
-    },
-  });
+  try {
+    await prisma.user.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
 
-  res.status(200).json({ message: "Usuário deletado com sucesso!" });
+    res.status(200).json({ message: "Usuário deletado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao deletar usuário" });
+  }
 });
+
+// --- Inicialização do Servidor ---
 
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.send("API PCU rodando 🚀");
+  res.send("API de Cadastro de Usuários rodando 🚀");
 });
 
 app.listen(PORT, () => {
