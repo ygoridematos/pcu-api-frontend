@@ -1,61 +1,30 @@
-# Cadastro de Usuários (Full Stack)
+👥 UserHub - Sistema de Cadastro Full Stack
+O UserHub é uma aplicação completa que demonstra a integração de ponta a ponta entre um frontend reativo e uma API escalável. O foco deste projeto foi a implementação de operações CRUD seguras e a gestão de um banco de dados NoSQL integrado para perfis de usuários.
 
-Sistema de cadastro de usuários desenvolvido para demonstrar a integração entre um Frontend em **React** e uma API RESTful em **Node.js**.
+🛠️ Stack Tecnológica
+Interface (Frontend)
+React.js: Componentização e reatividade para uma interface fluida.
 
-O projeto permite criar, listar, editar e excluir usuários, salvando os dados em um banco de dados relacional via Prisma ORM.
+Axios: Gerenciamento eficiente de requisições HTTP e comunicação com o servidor.
 
-## 🚀 Tecnologias Utilizadas
+CSS Modules: Estilização isolada para evitar conflitos de escopo no design.
 
-### Frontend
+Engine (Backend)
+Node.js & Express: Servidor de alta performance e sistema de rotas REST.
 
-- **React** (Vite)
-- **Axios** (Consumo de API)
-- **CSS Puro** (Estilização customizada)
+Prisma ORM: Mapeamento objeto-relacional para consultas otimizadas no banco de dados.
 
-### Backend
+MongoDB: Banco de dados flexível para armazenamento de perfis de usuários.
 
-- **Node.js** & **Express**
-- **Prisma ORM** (Gerenciamento de banco de dados)
-- **MongoDB** (ou SQL, dependendo do seu schema do Prisma)
-- **Cors** (Segurança de acesso)
+CORS: Política de segurança configurada para integração entre domínios.
 
-## ⚙️ Como rodar o projeto
+⚙️ Fluxo de Execução Local
+Para rodar o projeto completo, siga os passos abaixo:
 
-Este projeto é dividido em duas partes: API e Frontend.
+1. Configuração do Backend
+   Entre na pasta api e configure o servidor: cd api npm install npx prisma generate npm run dev O servidor iniciará por padrão em http://localhost:3000.
 
-### Pré-requisitos
+2. Configuração do Frontend
+   Em um novo terminal, entre na pasta do projeto: cd cadastro-usuarios npm install Crie um arquivo .env na raiz do frontend com a seguinte variável: VITE_API_URL=http://localhost:3000 Inicie a aplicação: npm run dev
 
-- Node.js instalado.
-- Banco de dados configurado no arquivo `.env` da API.
-
-### 1. Rodando a API (Backend)
-
-Entre na pasta da API e instale as dependências:
-
-```bash
-cd api
-npm install
-npx prisma generate
-Inicie o servidor:
-
-Bash
-node server.js
-# ou
-npm run dev
-O servidor rodará na porta 3000.
-
-2. Rodando o Frontend
-Entre na pasta do projeto React:
-
-Bash
-cd cadastro-usuarios
-npm install
-Crie um arquivo .env na raiz do frontend com a URL da API:
-
-Plaintext
-VITE_API_URL=http://localhost:3000
-Inicie o projeto:
-
-Bash
-npm run dev
-```
+Desenvolvido por Ygor I. de Matos.
